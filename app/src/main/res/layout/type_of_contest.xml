@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="35dp">
+    android:background="#143f6e"
+    android:text="Upcomming Contest"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:gravity="center_horizontal"
+    android:textStyle="bold"
+    android:textColor="#fff"
+    android:textSize="24sp"
+    android:id="@+id/type_of_contest">
 
-    <TextView
-        android:layout_height="34dp"
-        android:layout_width="match_parent"
-        android:background="#3c3360"
-        android:text="Upcomming Contest"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="#fff"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/type_of_contest"/>
-
-
-
-</android.support.v7.widget.CardView>
+</TextView>

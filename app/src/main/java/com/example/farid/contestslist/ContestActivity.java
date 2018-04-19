@@ -3,15 +3,16 @@ package com.example.farid.contestslist;
 public class ContestActivity {
 
     String start_date, start_information, end_date, end_information, contest_name;
-    int contest_image;
+    int contest_image, contest_type;
 
-    public ContestActivity(String start_date, String start_information, String end_date, String end_information, String contest_name, int contest_image) {
+    public ContestActivity(String start_date, String start_information, String end_date, String end_information, String contest_name, int contest_image, int contest_type) {
         this.start_date = start_date;
         this.start_information = start_information;
         this.end_date = end_date;
         this.end_information = end_information;
         this.contest_name = contest_name;
         this.contest_image = contest_image;
+        this.contest_type = contest_type;
     }
 
     public String getStart_date() {
@@ -28,6 +29,10 @@ public class ContestActivity {
 
     public String getEnd_information() {
         return end_information;
+    }
+
+    public int getContest_type() {
+        return contest_type;
     }
 
     public int getContest_image() {

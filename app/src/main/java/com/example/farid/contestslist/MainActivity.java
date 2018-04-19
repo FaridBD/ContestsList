@@ -1,12 +1,20 @@
 package com.example.farid.contestslist;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Debug;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Constraints;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ExpandableListAdapter;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,86 +29,112 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
     private List<ContestActivity> Codeforces_list = new ArrayList<>();
     private List<ContestActivity> CodeChef_list = new ArrayList<>();
-
-
+    private List<ContestActivity> All_Contest_list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Collecting Contests Data and Arranging them
+        make_list_for_Codeforces();
+        make_list_for_CodeChef();
+
+        try {
+            TimeUnit.SECONDS.sleep(6);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Arrange_Contest_List();
+        // Collction and Arranging them Ends Here
+
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        //make_list_for_Codeforces();
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "Present contest", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
-        Codeforces_list.add(new ContestActivity("24", "Apr 2018 (21:00)", "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
-
-
-        RecyclerAdapter myAdapter = new RecyclerAdapter(this, Codeforces_list);
+        RecyclerAdapter myAdapter = new RecyclerAdapter(this, All_Contest_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(myAdapter);
-        
     }
-    public void make_list_for_Codeforces() {
 
-        //Codeforces_list.add(new ContestActivity("1", "Method e aise", "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
+    public void Arrange_Contest_List() {
+        Collections.sort(All_Contest_list, new Comparator<ContestActivity>() {
+            @Override
+            public int compare(ContestActivity x, ContestActivity y) {
+
+                int Start_Day_X = Integer.valueOf(x.start_date.substring(0, 2));
+                int Start_Day_Y = Integer.valueOf(y.start_date.substring(0, 2));
+
+                int Start_Month_X = Month(x.start_information.substring(0, 3));
+                int Start_Month_Y = Month(y.start_information.substring(0, 3));
+
+                int Start_Year_X = Integer.valueOf(x.start_information.substring(4, 8));
+                int Start_Year_Y = Integer.valueOf(y.start_information.substring(4, 8));
+
+                int Start_Hour_X = Integer.valueOf(x.start_information.substring(9, 11));
+                int Start_Hour_Y = Integer.valueOf(y.start_information.substring(9, 11));
+
+                int Start_Min_X = Integer.valueOf(x.start_information.substring(12, 14));
+                int Start_Min_Y = Integer.valueOf(y.start_information.substring(12, 14));
+
+
+                if (x.contest_type == y.contest_type) {
+                    if (Start_Year_X == Start_Year_Y) {
+                        if (Start_Month_X == Start_Month_Y) {
+                            if (Start_Day_X == Start_Day_Y) {
+                                if (Start_Hour_X == Start_Hour_Y) {
+                                    return Start_Min_X < Start_Min_Y ? -1 : 1;
+                                }
+                                return Start_Hour_X < Start_Hour_Y ? -1 : 1;
+                            }
+                            return Start_Day_X < Start_Day_Y ? -1 : 1;
+                        }
+                        return Start_Month_X < Start_Month_Y ? -1 : 1;
+                    }
+                    return Start_Year_X < Start_Year_Y ? -1 : 1;
+                }
+                return x.contest_type < y.contest_type ? -1 : 1;
+            }
+        });
+    }
+
+    public void make_list_for_Codeforces() {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-
-                //String url = "https://www.codechef.com/users/_farid_";
-                String url = "http://codeforces.com/contests";
-                Codeforces_list.add(new ContestActivity("1", "Element paisi", "25", "Apr 2018 (22:00)", "Try 1", R.drawable.codeforces));
                 try {
-
-
+                    String url = "http://www.codeforces.com/contests";
                     Document doc = Jsoup.connect(url).get();
-
-                    Codeforces_list.add(new ContestActivity("1", "Element paisi", "25", "Apr 2018 (22:00)", "Try 2", R.drawable.codeforces));
-                    //Connection.Response response = Jsoup.connect(url).timeout(5000).execute();
-                    //Document doc = response.parse();
-
                     Elements el = doc.getElementsByClass("datatable").get(0).select("tbody").select("tr");
 
-                    Codeforces_list.add(new ContestActivity("1", "Element paisi", "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
-
                     int len = el.size();
-                    /**
-                     * VK Cup 2018 - Round 3 Apr/29/2018 16:05 02:00
-                     */
 
                     for (int i = 1; i < len; i++) {
 
-                        //Toast.makeText( this, "HY", Toast.LENGTH_LONG ).show();
                         String contest_name = el.get(i).select("td").get(0).text(); // Contest_Name
                         String contest_date = el.get(i).select("td").get(2).text();
                         String contest_duration = el.get(i).select("td").get(3).text();
 
-                        Codeforces_list.add(new ContestActivity(Integer.toString(i), contest_name, "25", "Apr 2018 (22:00)", "April Fool", R.drawable.codeforces));
+                        int type = 2;
+
+                        if(contest_name.endsWith("Enter »")) {
+                            type = 1;
+                            int ln = contest_name.length();
+                            contest_name = contest_name.substring(0, ln-7);
+                        }
+
                         String start_date = contest_date.substring(4, 6);
                         String start_information = contest_date.replaceFirst("/" + start_date + "/", " ");
 
@@ -111,26 +145,88 @@ public class MainActivity extends AppCompatActivity {
                         String end_date = end_date_information.substring(8, 10);
                         int le = end_date_information.length();
 
-
                         String end_information = end_date_information.substring(4, 7) + " " + end_date_information.substring(le - 4, le) + " " + end_date_information.substring(11, 20);
+                        end_information = end_information.substring(0, end_information.length()-4);
 
-                        //System.out.printf("%s <> %s <> %s <> %s\n", start_date, start_information, end_information, end_date);
-
-                        //Codeforces_list.add(new ContestActivity(start_date, start_information, null, null, contest_name, R.drawable.codeforces));
-                        Codeforces_list.add(new ContestActivity(start_date, start_information, end_date, end_information, contest_name, R.drawable.codeforces));
-
+                        All_Contest_list.add(new ContestActivity(start_date, start_information, end_date, end_information, contest_name, R.drawable.codeforces, type));
                     }
+
                 } catch (Exception e) {
-                    Codeforces_list.add(new ContestActivity("1", "Method e aise", "25", "Apr 2018 (22:00)", "Catch e hamaise", R.drawable.codeforces));
-                    e.printStackTrace();
+
+                }
+
+            }
+        }).start();
+    }
+
+    public void make_list_for_CodeChef() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String url = "https://www.codechef.com/contests";
+
+                    Document doc = Jsoup.connect(url).get();
+                    Elements el = doc.getElementsByClass("dataTable");
+
+                    for(int k=0; k<2; k++) {
+                        Elements table = el.get(k).select("tbody");
+                        Elements rows = table.select("tr");
+
+                        for(int i=0; i<rows.size(); i += 1) {
+
+                            Element row0 = rows.get(i);
+                            Elements cols0 = row0.select("td");
+
+                            String tmp;
+                            String ContestName = row0.select("td").select("a").text();
+
+                            tmp = row0.select("td").text();
+
+                            String[] arr = new String[10];
+                            int ind = -1;
+                            String without_ContestName = "";
+                            for(int j=0; j<tmp.length(); j++) {
+                                int cInd = 0, tInd = j;
+
+                                if(tmp.charAt(j) == ' ') {
+                                    arr[++ind] = without_ContestName;
+                                    without_ContestName = "";
+                                    continue;
+                                }
+                                int len = ContestName.length();
+
+                                while(cInd < len && ContestName.charAt(cInd) == (tmp.charAt(tInd))) {
+                                    cInd++; tInd++;
+                                }
+                                if(cInd == len) j = tInd;
+                                else {
+                                    without_ContestName += tmp.charAt(j);
+                                }
+                            }
+                            arr[++ind] = without_ContestName;
+
+                            String ContestLink = url + "/" + arr[0];
+                            String StartDate = arr[2] + " " + arr[3];
+                            String StartTime = arr[4];
+                            String EndDate = arr[6] + " " + arr[7];
+                            String EndTime = arr[8];
+
+                            EndTime = EndTime.substring(0, 5);
+                            StartTime = StartTime.substring(0, 5);
+
+                            All_Contest_list.add(new ContestActivity(arr[1], StartDate + " " + StartTime, arr[5], EndDate + " " + EndTime , ContestName, R.drawable.codechef, k+1));
+                        }
+                    }
+                    System.out.println("");
+                }catch (Exception e) {
+
                 }
             }
         }).start();
-
     }
-    /**
-     * VK Cup 2018 - Round 3 Apr/29/2018 16:05 02:00
-     */
+
     public static String GiveMeEnd(String start_date, String duration) {
 
         Helpful_Codes(); // Nothing but useful
@@ -202,7 +298,6 @@ public class MainActivity extends AppCompatActivity {
 
         return End_Time;
     }
-
 
     public static int Month(String month) {
         if(month.toLowerCase() == "jan") return 1;

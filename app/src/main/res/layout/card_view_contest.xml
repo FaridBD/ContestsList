@@ -5,30 +5,36 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#0a0a0a"
-    android:layout_margin="10dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
     app:cardCornerRadius="15dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp"
     android:orientation="vertical"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/contest_name_layout"
+        android:background="@drawable/present_contest_bg">
         <TextView
             android:id="@+id/contest_name"
             android:layout_width="match_parent"
-            android:layout_height="30sp"
+            android:layout_height="25sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:gravity="center"
             android:text="April Fool Contest"
             android:textColor="#fff"
             android:textStyle="bold"
-            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeMaxTextSize="25sp"
             app:autoSizeMinTextSize="10sp"
             app:autoSizeStepGranularity="1sp"
             app:autoSizeTextType="uniform"
-            tools:ignore="MissingPrefix"
-            android:background="#337365"/>
-    </LinearLayout>
+            tools:ignore="MissingPrefix"/>
+    </android.support.constraint.ConstraintLayout>
 
 
     <LinearLayout
