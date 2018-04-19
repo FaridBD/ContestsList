@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                         String contest_name = el.get(i).select("td").get(0).text(); // Contest_Name
                         String contest_date = el.get(i).select("td").get(2).text();
                         String contest_duration = el.get(i).select("td").get(3).text();
+                        String contest_link = null;
+
 
                         int type = 2;
 
@@ -133,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             type = 1;
                             int ln = contest_name.length();
                             contest_name = contest_name.substring(0, ln-7);
+                            contest_link = el.get(i).select("td").get(0).select("a").attr("abs:href");
                         }
 
                         String start_date = contest_date.substring(4, 6);
@@ -148,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                         String end_information = end_date_information.substring(4, 7) + " " + end_date_information.substring(le - 4, le) + " " + end_date_information.substring(11, 20);
                         end_information = end_information.substring(0, end_information.length()-4);
 
-                        All_Contest_list.add(new ContestActivity(start_date, start_information, end_date, end_information, contest_name, R.drawable.codeforces, type));
+                        All_Contest_list.add(new ContestActivity(start_date, start_information, end_date, end_information, contest_name, contest_link, R.drawable.codeforces, type));
                     }
 
                 } catch (Exception e) {
@@ -216,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                             EndTime = EndTime.substring(0, 5);
                             StartTime = StartTime.substring(0, 5);
 
-                            All_Contest_list.add(new ContestActivity(arr[1], StartDate + " " + StartTime, arr[5], EndDate + " " + EndTime , ContestName, R.drawable.codechef, k+1));
+                            All_Contest_list.add(new ContestActivity(arr[1], StartDate + " " + StartTime, arr[5], EndDate + " " + EndTime , ContestName, ContestLink, R.drawable.codechef, k+1));
                         }
                     }
                     System.out.println("");

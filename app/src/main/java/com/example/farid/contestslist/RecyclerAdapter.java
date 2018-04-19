@@ -1,9 +1,12 @@
 package com.example.farid.contestslist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +15,9 @@ import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.net.URI;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recyclerViewHolder> {
@@ -53,7 +58,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
     }
 
     @Override
-    public void onBindViewHolder(recyclerViewHolder holder, int position) {
+    public void onBindViewHolder(recyclerViewHolder holder, final int position) {
 
             holder.tv_contest_name.setText(list.get(position).getContest_name());
             holder.tv_start_date.setText(list.get(position).getStart_date());
@@ -61,7 +66,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
             holder.tv_end_date.setText(list.get(position).getEnd_date());
             holder.tv_end_information.setText(list.get(position).getEnd_information());
             holder.img_contest.setImageResource(list.get(position).getContest_image());
-
+            holder.card_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = list.get(position).getContest_link();
+                    if(url != null) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        mContest.startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(mContest, "Sorry.. No valid URL is there", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
     }
 
     @Override
@@ -86,6 +103,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
         TextView tv_contest_name;
         ImageView img_contest;
         TextView tv_type_of_contest;
+        CardView card_view;
 
         public recyclerViewHolder(View itemView) {
             super(itemView);
@@ -97,6 +115,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
             tv_contest_name = itemView.findViewById(R.id.contest_name);
             img_contest = itemView.findViewById(R.id.img_contest);
             tv_type_of_contest = itemView.findViewById(R.id.type_of_contest);
+            card_view = itemView.findViewById(R.id.card_view);
         }
     }
 
