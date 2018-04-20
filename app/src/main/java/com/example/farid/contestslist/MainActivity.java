@@ -1,5 +1,6 @@
 package com.example.farid.contestslist;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
@@ -12,6 +13,8 @@ import android.support.v7.util.SortedList;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private List<ContestActivity> CodeChef_list = new ArrayList<>();
     private List<ContestActivity> All_Contest_list = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +57,15 @@ public class MainActivity extends AppCompatActivity {
         // Collecting Contests Data and Arranging them
         make_list_for_Codeforces();
         make_list_for_CodeChef();
-
+        /**
         try {
             TimeUnit.SECONDS.sleep(6);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+         */
+        try {
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -151,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                         String end_information = end_date_information.substring(4, 7) + " " + end_date_information.substring(le - 4, le) + " " + end_date_information.substring(11, 20);
                         end_information = end_information.substring(0, end_information.length()-4);
 
-                        All_Contest_list.add(new ContestActivity(start_date, start_information, end_date, end_information, contest_name, contest_link, R.drawable.codeforces, type));
+                        All_Contest_list.add(new ContestActivity(start_date, start_information, end_date, end_information, contest_name, contest_link, R.drawable.codeforces, type, "codeforces"));
                     }
 
                 } catch (Exception e) {
@@ -169,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     String url = "https://www.codechef.com/contests";
+                    String url2 = "https://www.codechef.com/";
 
                     Document doc = Jsoup.connect(url).get();
                     Elements el = doc.getElementsByClass("dataTable");
@@ -210,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             arr[++ind] = without_ContestName;
 
-                            String ContestLink = url + "/" + arr[0];
+                            String ContestLink = url2 + "/" + arr[0];
                             String StartDate = arr[2] + " " + arr[3];
                             String StartTime = arr[4];
                             String EndDate = arr[6] + " " + arr[7];
@@ -219,12 +230,10 @@ public class MainActivity extends AppCompatActivity {
                             EndTime = EndTime.substring(0, 5);
                             StartTime = StartTime.substring(0, 5);
 
-                            All_Contest_list.add(new ContestActivity(arr[1], StartDate + " " + StartTime, arr[5], EndDate + " " + EndTime , ContestName, ContestLink, R.drawable.codechef, k+1));
+                            All_Contest_list.add(new ContestActivity(arr[1], StartDate + " " + StartTime, arr[5], EndDate + " " + EndTime , ContestName, ContestLink, R.drawable.codechef, k+1, "codechef"));
                         }
                     }
-                    System.out.println("");
                 }catch (Exception e) {
-
                 }
             }
         }).start();
