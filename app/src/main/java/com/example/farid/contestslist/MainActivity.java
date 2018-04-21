@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         // Collecting Contests Data and Arranging them
         make_list_for_Codeforces();
         make_list_for_CodeChef();
+
         /**
         try {
             TimeUnit.SECONDS.sleep(6);
@@ -64,11 +65,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
          */
+
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         Arrange_Contest_List();
         // Collction and Arranging them Ends Here
 
@@ -76,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerAdapter myAdapter = new RecyclerAdapter(this, All_Contest_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(myAdapter);
+
     }
 
     public void Arrange_Contest_List() {

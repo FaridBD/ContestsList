@@ -51,13 +51,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
         background_anim.setExitFadeDuration(4500);
 
         if(viewType == 1) {
-            //background_anim.start();
+            background_anim.start();
         } else {
             int red = Color.parseColor("#FF4EA184");
             tv.setBackgroundColor(red);
             //background_anim.stop();
         }
-
         return new recyclerViewHolder(view);
     }
 
@@ -86,8 +85,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
                     LinearLayout share = mDialog.findViewById(R.id.share_link);
                     ImageView icon = mDialog.findViewById(R.id.tv_judge_icon);
 
-                    if(list.get(position).getJudge() == "codexhef") {
-                        icon.setImageResource(list.get(position).getContest_image());
+                    if(list.get(position).getJudge().toLowerCase() == "codechef") {
+                        icon.setImageResource(R.drawable.codechef_round_icon2);
                     }
 
                     final TextView status = mDialog.findViewById(R.id.tv_status);
