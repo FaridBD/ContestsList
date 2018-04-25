@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    String url = "http://www.codeforces.com/contests";
+                    String url = "http://codeforces.com/contests?complete=true";
                     Document doc = Jsoup.connect(url).get();
                     Elements el = doc.getElementsByClass("datatable").get(0).select("tbody").select("tr");
 
@@ -175,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
                         String contest_date = el.get(i).select("td").get(2).text();
                         String contest_duration = el.get(i).select("td").get(3).text();
                         String contest_link = null;
-
 
                         int type = 2;
 
