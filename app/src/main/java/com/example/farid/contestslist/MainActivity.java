@@ -1,10 +1,15 @@
 package com.example.farid.contestslist;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Debug;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.Constraints;
 import android.support.v7.app.AppCompatActivity;
@@ -48,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private List<ContestActivity> CodeChef_list = new ArrayList<>();
     private List<ContestActivity> All_Contest_list = new ArrayList<>();
 
+    private Context mContext = this;
 
+    @SuppressLint("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,12 +72,15 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
          */
+        showProgressBar();
 
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        System.out.println(All_Contest_list.size() + "**************************************");
 
         Arrange_Contest_List();
         // Collction and Arranging them Ends Here
@@ -80,6 +90,30 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(myAdapter);
 
+    }
+
+
+    public void showProgressBar() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ProgressDialog dialog = new ProgressDialog(mContext);
+                dialog.setTitle("Loading...");
+                dialog.setMessage("Please wait.");
+                dialog.setIndeterminate(true);
+                dialog.setCancelable(false);
+                dialog.show();
+
+                long delayInMillis = 5000;
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                    }
+                }, delayInMillis);
+            }
+        });
     }
 
     public void Arrange_Contest_List() {

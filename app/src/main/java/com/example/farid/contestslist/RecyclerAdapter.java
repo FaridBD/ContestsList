@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recyclerViewHolder> {
@@ -75,6 +76,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
                 public void onClick(View v) {
 
                     final Dialog mDialog = new Dialog(mContest);
+
+
+                    // Setting window animation Randomly
+                    Random r = new Random();
+                    int x = r.nextInt(3)+1;
+
+                    if(x == 1) {
+                        mDialog.getWindow().getAttributes().windowAnimations = R.style.SlideUpDown;
+                    }
+                    else if(x == 2) {
+                        mDialog.getWindow().getAttributes().windowAnimations = R.style.SlideLeftRight;
+                    }
+                    else if(x == 3) {
+                        mDialog.getWindow().getAttributes().windowAnimations = R.style.SlideScale;
+                    }
+
+
                     mDialog.setContentView(R.layout.custom_popup_window);
 
                     TextView title = mDialog.findViewById(R.id.tv_contest_title);
