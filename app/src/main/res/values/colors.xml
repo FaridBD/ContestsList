@@ -3,4 +3,6 @@
     <color name="colorPrimary">#144a6e</color>
     <color name="colorPrimaryDark">#03060d</color>
     <color name="colorAccent">#4ea184</color>
+    <color name="popUpBack">#65828e</color>
+
 </resources>

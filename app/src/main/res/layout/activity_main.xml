@@ -8,7 +8,6 @@
     tools:context=".MainActivity"
     android:background="#041d40">
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"

@@ -5,7 +5,10 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Debug;
@@ -27,6 +30,8 @@ import android.widget.ProgressBar;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.jlmd.animatedcircleloadingview.AnimatedCircleLoadingView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     public BottomSheetBehavior bottomSheetBehavior;
     RecyclerView recyclerView;
     private Context mContext = this;
+    private AnimatedCircleLoadingView animatedCircleLoadingView;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -75,36 +81,35 @@ public class MainActivity extends AppCompatActivity {
         bottomSheetBehavior = BottomSheetBehavior.from(share_bottom_sheet);
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        recyclerView = findViewById(R.id.recyclerview);
 
         BackgroundTask backgroundTask = new BackgroundTask(this);
         backgroundTask.execute();
-        System.out.println(All_Contest_list.size() + "*******************************");
-
-        recyclerView = findViewById(R.id.recyclerview);
-
 
     }
 
     public class BackgroundTask extends AsyncTask<Void, Void, Void>{
 
-        private ProgressDialog dialog;
+        private Dialog dialog;
 
         BackgroundTask(MainActivity activity){
-            dialog = new ProgressDialog(activity);
-
+            dialog = new Dialog(activity);
         }
-
         @Override
         protected void onPreExecute() {
-            dialog.setTitle("Loading...");
-            dialog.setMessage("Please wait.");
+            dialog.setContentView(R.layout.circle_loading_dialog);
+            animatedCircleLoadingView = dialog.findViewById(R.id.circle_loading_view);
+            dialog.getWindow().setBackgroundDrawableResource(R.color.popUpBack);
             dialog.show();
+            startLoading();
+            startPercentMockThread();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             if(dialog.isShowing()) {
                 dialog.dismiss();
+
                 RecyclerAdapter myAdapter = new RecyclerAdapter(MainActivity.this, All_Contest_list, faceook, whatsapp, telegram, googleplus, email, messenger, bottomSheetBehavior, share_bottom_sheet);
                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
                 recyclerView.setAdapter(myAdapter);
@@ -115,37 +120,52 @@ public class MainActivity extends AppCompatActivity {
 
             make_list_for_Codeforces();
             make_list_for_CodeChef();
-
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             Arrange_Contest_List();
+
             return null;
         }
     }
+    private void startLoading() {
+        this.animatedCircleLoadingView.startDeterminate();
+    }
 
-
-    public void showProgressBar() {
-        new Thread(new Runnable() {
+    private void startPercentMockThread() {
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                final ProgressDialog dialog = new ProgressDialog(mContext);
-                dialog.setTitle("Loading...");
-                dialog.setMessage("Please wait.");
-                dialog.setIndeterminate(true);
-                dialog.setCancelable(false);
-                dialog.show();
-
-                long delayInMillis = 5000;
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        dialog.dismiss();
+                try {
+                    Thread.sleep(500);
+                    for (int i = 0; i <= 100; i++) {
+                        Thread.sleep(65);
+                        changePercent(i);
                     }
-                }, delayInMillis);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }
+
+    private void changePercent(final int percent) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                animatedCircleLoadingView.setPercent(percent);
+            }
+        });
+    }
+
+    public void resetLoading() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                animatedCircleLoadingView.resetLoading();
             }
         });
     }

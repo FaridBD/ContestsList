@@ -83,63 +83,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
             holder.tv_end_information.setText(list.get(position).getEnd_information());
             holder.img_contest.setImageResource(list.get(position).getContest_image());
 
-            holder.card_view.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    holder.card_view.setClickable(false);
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
-                    facebook.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(mContest, "Facebook share button is clicked", Toast.LENGTH_SHORT).show();
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            holder.card_view.setClickable(true);
-                        }
-                    });
-                    whatsapp.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            Toast.makeText(mContest, "Whatsapp share button is clicked", Toast.LENGTH_SHORT).show();
-                            holder.card_view.setClickable(true);
-                        }
-                    });
-                    telegram.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            Toast.makeText(mContest, "Telegram share button is clicked", Toast.LENGTH_SHORT).show();
-                            holder.card_view.setClickable(true);
-                        }
-                    });
-                    messenger.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            Toast.makeText(mContest, "Messenger share button is clicked", Toast.LENGTH_SHORT).show();
-                            holder.card_view.setClickable(true);
-                        }
-                    });
-                    googleplus.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            Toast.makeText(mContest, "Google+ share button is clicked", Toast.LENGTH_SHORT).show();
-                            holder.card_view.setClickable(true);
-                        }
-                    });
-                    email.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            Toast.makeText(mContest, "Email share button is clicked", Toast.LENGTH_SHORT).show();
-                            holder.card_view.setClickable(true);
-                        }
-                    });
-                    return true;
-                }
-            });
             share_bottom_sheet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -249,6 +192,61 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.recycl
                     mDialog.show();
                 }
             });
+            holder.card_view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+                    facebook.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(mContest, "Facebook share button is clicked", Toast.LENGTH_SHORT).show();
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            holder.card_view.setClickable(true);
+                        }
+                    });
+                    whatsapp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            Toast.makeText(mContest, "Whatsapp share button is clicked", Toast.LENGTH_SHORT).show();
+                            holder.card_view.setClickable(true);
+                        }
+                    });
+                    telegram.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            Toast.makeText(mContest, "Telegram share button is clicked", Toast.LENGTH_SHORT).show();
+                            holder.card_view.setClickable(true);
+                        }
+                    });
+                    messenger.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            Toast.makeText(mContest, "Messenger share button is clicked", Toast.LENGTH_SHORT).show();
+                            holder.card_view.setClickable(true);
+                        }
+                    });
+                    googleplus.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            Toast.makeText(mContest, "Google+ share button is clicked", Toast.LENGTH_SHORT).show();
+                            holder.card_view.setClickable(true);
+                        }
+                    });
+                    email.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            Toast.makeText(mContest, "Email share button is clicked", Toast.LENGTH_SHORT).show();
+                            holder.card_view.setClickable(true);
+                        }
+                    });
+                    return true;
+            }});
     }
     @Override
     public int getItemViewType(int position) {
