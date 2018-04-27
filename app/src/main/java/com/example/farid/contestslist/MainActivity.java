@@ -12,6 +12,7 @@ import android.os.Debug;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.Constraints;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.util.SortedList;
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     private List<ContestActivity> CodeChef_list = new ArrayList<>();
     private List<ContestActivity> All_Contest_list = new ArrayList<>();
 
+    public LinearLayout faceook, whatsapp, telegram, email, googleplus, messenger, bottom_she, share_bottom_sheet;
+    public BottomSheetBehavior bottomSheetBehavior;
+
     private Context mContext = this;
 
     @SuppressLint("WrongConstant")
@@ -60,6 +64,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        faceook = findViewById(R.id.facebook_share);
+        whatsapp = findViewById(R.id.whatsapp_share);
+        telegram = findViewById(R.id.telegram_share);
+        googleplus = findViewById(R.id.googleplus_share);
+        messenger = findViewById(R.id.messenger_share);
+        email = findViewById(R.id.email_share);
+        share_bottom_sheet = findViewById(R.id.share_bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(share_bottom_sheet);
+
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         // Collecting Contests Data and Arranging them
         make_list_for_Codeforces();
@@ -86,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         // Collction and Arranging them Ends Here
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        RecyclerAdapter myAdapter = new RecyclerAdapter(this, All_Contest_list);
+        RecyclerAdapter myAdapter = new RecyclerAdapter(this, All_Contest_list, faceook, whatsapp, telegram, googleplus, email, messenger, bottomSheetBehavior, share_bottom_sheet);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(myAdapter);
 
