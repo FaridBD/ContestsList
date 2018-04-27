@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     public LinearLayout faceook, whatsapp, telegram, email, googleplus, messenger, bottom_she, share_bottom_sheet;
     public BottomSheetBehavior bottomSheetBehavior;
-
+    RecyclerView recyclerView;
     private Context mContext = this;
 
     @SuppressLint("WrongConstant")
@@ -76,35 +76,54 @@ public class MainActivity extends AppCompatActivity {
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-        // Collecting Contests Data and Arranging them
-        make_list_for_Codeforces();
-        make_list_for_CodeChef();
+        BackgroundTask backgroundTask = new BackgroundTask(this);
+        backgroundTask.execute();
+        System.out.println(All_Contest_list.size() + "*******************************");
 
-        /**
-        try {
-            TimeUnit.SECONDS.sleep(6);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        recyclerView = findViewById(R.id.recyclerview);
+
+
+    }
+
+    public class BackgroundTask extends AsyncTask<Void, Void, Void>{
+
+        private ProgressDialog dialog;
+
+        BackgroundTask(MainActivity activity){
+            dialog = new ProgressDialog(activity);
+
         }
-         */
-        showProgressBar();
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        @Override
+        protected void onPreExecute() {
+            dialog.setTitle("Loading...");
+            dialog.setMessage("Please wait.");
+            dialog.show();
         }
 
-        System.out.println(All_Contest_list.size() + "**************************************");
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(dialog.isShowing()) {
+                dialog.dismiss();
+                RecyclerAdapter myAdapter = new RecyclerAdapter(MainActivity.this, All_Contest_list, faceook, whatsapp, telegram, googleplus, email, messenger, bottomSheetBehavior, share_bottom_sheet);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                recyclerView.setAdapter(myAdapter);
+            }
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
 
-        Arrange_Contest_List();
-        // Collction and Arranging them Ends Here
+            make_list_for_Codeforces();
+            make_list_for_CodeChef();
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        RecyclerAdapter myAdapter = new RecyclerAdapter(this, All_Contest_list, faceook, whatsapp, telegram, googleplus, email, messenger, bottomSheetBehavior, share_bottom_sheet);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(myAdapter);
-
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Arrange_Contest_List();
+            return null;
+        }
     }
 
 
@@ -364,18 +383,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static int Month(String month) {
-        if(month.toLowerCase() == "jan") return 1;
-        if(month.toLowerCase() == "feb") return 2;
-        if(month.toLowerCase() == "mar") return 3;
-        if(month.toLowerCase() == "apr") return 4;
-        if(month.toLowerCase() == "may") return 5;
-        if(month.toLowerCase() == "jun") return 6;
-        if(month.toLowerCase() == "jul") return 7;
-        if(month.toLowerCase() == "aug") return 8;
-        if(month.toLowerCase() == "sep") return 9;
-        if(month.toLowerCase() == "oct") return 10;
-        if(month.toLowerCase() == "nov") return 11;
-        if(month.toLowerCase() == "dec") return 12;
+        if(month.toLowerCase().equals("jan")) return 1;
+        if(month.toLowerCase().equals("feb")) return 2;
+        if(month.toLowerCase().equals("mar")) return 3;
+        if(month.toLowerCase().equals("apr")) return 4;
+        if(month.toLowerCase().equals("may")) return 5;
+        if(month.toLowerCase().equals("jun")) return 6;
+        if(month.toLowerCase().equals("jul")) return 7;
+        if(month.toLowerCase().equals("aug")) return 8;
+        if(month.toLowerCase().equals("sep")) return 9;
+        if(month.toLowerCase().equals("oct")) return 10;
+        if(month.toLowerCase().equals("nov")) return 11;
+        if(month.toLowerCase().equals("dec")) return 12;
         return 0;
     }
 
